@@ -4,7 +4,9 @@ export default function globalStyle() {
     style.id = "__floccUI-global";
     style.innerHTML = `
         [class^="__floccUI-"],
-        [class^="__floccUI-"] * {
+        [class^="__floccUI-"] *,
+        [class^="__floccUI-"]:after,
+        [class^="__floccUI-"]:before {
             font-family: "system-ui", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             position: relative;
             box-sizing: border-box;

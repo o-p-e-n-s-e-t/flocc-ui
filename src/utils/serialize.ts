@@ -10,6 +10,8 @@ const numeric = [
   "paddingBottom",
   "paddingLeft",
   "fontSize",
+  "height",
+  "width",
 ];
 
 type StyleObj = {
