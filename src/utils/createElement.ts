@@ -38,7 +38,9 @@ export default function createElement<T extends HTMLElement>(
       el.appendChild(children);
     } else {
       children.forEach((child) => {
-        el.appendChild(child);
+        if (child) {
+          el.appendChild(child);
+        }
       });
     }
   }

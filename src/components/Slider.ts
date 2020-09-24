@@ -2,7 +2,7 @@ import { parsePair } from "../utils/serialize";
 import createStyle from "../utils/createStyle";
 import Base from "./Base";
 import styles from "./Slider.css";
-import createElement, { createLabel } from "../utils/createElement";
+import { createDiv, createLabel, createInput } from "../utils/createElement";
 
 interface SliderOptions {
   label?: string;
@@ -28,7 +28,6 @@ class Slider extends Base {
   marker: HTMLLabelElement;
   opts: SliderOptions = Object.assign({}, defaultSliderOptions);
   value: number;
-  textLabel: HTMLLabelElement;
 
   constructor(opts?: SliderOptions) {
     super();
@@ -36,28 +35,42 @@ class Slider extends Base {
 
     this.value = this.opts.value;
 
-    this.element = createElement(
-      "div",
+    this.marker = createLabel({
+      className: "__floccUI-slider__marker",
+    });
+
+    const fauxMarker = createLabel({
+      className: "__floccUI-slider__marker",
+    });
+    fauxMarker.style.position = "absolute";
+    fauxMarker.style.opacity = "0";
+    document.body.appendChild(fauxMarker);
+
+    let longestNumString = "";
+    for (let v = opts.min; v < opts.max; v += opts.step) {
+      if (v.toString().length > longestNumString.length) {
+        longestNumString = v.toString();
+      }
+    }
+    fauxMarker.innerHTML = longestNumString;
+    requestAnimationFrame(() => {
+      this.marker.style.width = fauxMarker.clientWidth + "px";
+      document.body.removeChild(fauxMarker);
+    });
+
+    this.element = createDiv(
       {
         className: "__floccUI-slider__container",
       },
       () => {
-        const children: HTMLElement[] = [];
-        if (opts.label) {
-          children.push(createElement("label", {}, () => opts.label));
-        }
-        children.push(
-          createElement(
-            "div",
+        return [
+          opts.label ? createLabel({}, () => opts.label) : null,
+          createDiv(
             {
               className: "__floccUI-slider__inner",
             },
             () => {
-              this.marker = createLabel({
-                className: "__floccUI-slider__marker",
-              });
-
-              this.input = createElement<HTMLInputElement>("input", {
+              this.input = createInput({
                 classList: "__floccUI-slider",
                 type: "range",
                 min: this.opts.min.toString(),
@@ -71,26 +84,11 @@ class Slider extends Base {
                 this.updateMarker();
                 this.callbacks.forEach((callback) => callback(this.value));
               });
-
-              const minLabel = createLabel(
-                {
-                  classList: "__floccUI-slider__marker __floccUI-slider__min",
-                },
-                () => this.opts.min.toString()
-              );
-
-              const maxLabel = createLabel(
-                {
-                  classList: "__floccUI-slider__marker __floccUI-slider__max",
-                },
-                () => this.opts.max.toString()
-              );
-
-              return [this.marker, this.input, minLabel, maxLabel];
+              return this.input;
             }
-          )
-        );
-        return children;
+          ),
+          this.marker,
+        ];
       }
     );
 
@@ -106,24 +104,18 @@ class Slider extends Base {
     // add CSS
     createStyle(styles, "__floccUI-slider-css");
 
-    requestAnimationFrame(() => this.updateMarker());
+    this.updateMarker();
   }
 
   updateMarker() {
-    const { min, max } = this.opts;
-    const { value } = this;
-    const containerWidth = this.element.getBoundingClientRect().width;
-    const { width } = this.input.getBoundingClientRect();
+    const { step } = this.opts;
+    const decimals =
+      (step | 0) === step ? 0 : step.toString().split(".")[1].length || 0;
 
-    const left = this.input.offsetLeft;
-    const top = this.input.offsetTop;
-    this.marker.innerHTML = value.toString();
-    this.marker.style.top = `${top - 32}px`;
-
-    const percent = (value - min) / (max - min);
-    this.marker.style.left = `calc(${left + 6}px + (${100 * percent}% / ${
-      containerWidth / (width - 12)
-    }))`;
+    let strValue = this.value.toString();
+    if (decimals > 0 && !strValue.includes(".")) strValue += ".";
+    while (strValue.split(".")[1].length < decimals) strValue += "0";
+    this.marker.innerHTML = strValue;
   }
 
   once(callback: (value: number) => void): this {
