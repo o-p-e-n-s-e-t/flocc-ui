@@ -12,7 +12,7 @@
     <div id="canvas"></div>
     <script>
       const { Agent, Environment, CanvasRenderer, utils } = window.flocc;
-      const { Slider, Input } = window.floccUI;
+      const { Panel, Slider, Input } = window.floccUI;
 
       const [width, height] = [500, 500];
       const environment = new Environment({ width, height });
@@ -41,40 +41,24 @@
         requestAnimationFrame(run);
       })();
 
-      new Slider({
-        min: -5,
-        max: 10,
-        step: 0.5,
-        value: environment.get("dx"),
-        label: "dx",
-        // style: {
-        //   border: "1px solid #aaa",
-        //   padding: "20px 60px",
-        //   marginBottom: 20,
-        //   width: 420,
-        // },
-      })
-        .mount("#container")
-        .onChange((value) => environment.set("dx", value));
-      new Slider({
-        min: -10,
-        max: 10,
-        step: 0.5,
-        value: environment.get("dy"),
-        label: "dy",
-      })
-        .mount("#container")
-        .onChange((value) => environment.set("dy", value));
-      new Input({
-        value: "#ebfff0",
-      })
-        .mount("#container")
-        .once((value) => {
-          document.body.style["background-color"] = value;
-        })
-        .onChange((value) => {
-          document.body.style["background-color"] = value;
-        });
+      new Panel(environment, () => [
+        new Slider({
+          name: "dx",
+          label: "oopsie",
+          min: -2,
+          max: 2,
+        }),
+        new Slider({
+          name: "dy",
+          min: 0,
+          max: 4,
+        }),
+        new Slider({
+          name: "dy",
+          min: 0,
+          max: 4,
+        }),
+      ]);
     </script>
   </body>
 </html>

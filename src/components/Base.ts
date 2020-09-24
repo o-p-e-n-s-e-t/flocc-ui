@@ -1,15 +1,15 @@
+import { Environment } from "flocc";
 import globalStyle from "../utils/globalStyle";
+import { Panel } from "./Panel";
 
 export default class Base {
   element: HTMLElement;
+  environment: Environment;
+  panel: Panel;
 
   constructor() {
     globalStyle();
   }
 
-  mount(el: string | HTMLElement): this {
-    const container = typeof el === "string" ? document.querySelector(el) : el;
-    if (container) container.appendChild(this.element);
-    return this;
-  }
+  update() {}
 }

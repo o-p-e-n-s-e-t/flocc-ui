@@ -1,6 +1,5 @@
 export default `
 .__floccUI-slider__container {
-    border: 1px solid #aaa;
     display: flex;
     align-items: center;
     font-size: 12px;
@@ -16,7 +15,7 @@ export default `
 .__floccUI-slider {
     appearance: none;
     -webkit-appearance: none;
-    display: block;
+    flex-grow: 2;
     width: 100%;
 }
 .__floccUI-slider:focus {

@@ -6,10 +6,10 @@ import { createDiv, createLabel, createInput } from "../utils/createElement";
 
 interface SliderOptions {
   label?: string;
+  name?: string;
   min?: number;
   max?: number;
   step?: number;
-  value?: number;
   style?: {
     [key: string]: string | number;
   };
@@ -19,21 +19,18 @@ const defaultSliderOptions = {
   min: 0,
   max: 1,
   step: 0.01,
-  value: 0,
 };
 
 class Slider extends Base {
+  listenerID: number;
   callbacks: ((value: number) => void)[] = [];
   input: HTMLInputElement;
   marker: HTMLLabelElement;
   opts: SliderOptions = Object.assign({}, defaultSliderOptions);
-  value: number;
 
   constructor(opts?: SliderOptions) {
     super();
     Object.assign(this.opts, opts);
-
-    this.value = this.opts.value;
 
     this.marker = createLabel({
       className: "__floccUI-slider__marker",
@@ -47,7 +44,9 @@ class Slider extends Base {
     document.body.appendChild(fauxMarker);
 
     let longestNumString = "";
-    for (let v = opts.min; v < opts.max; v += opts.step) {
+    for (let v = this.opts.min; v < this.opts.max; v += this.opts.step) {
+      // prevent floating-point numbers from getting too long
+      v = Math.round(v * 10000) / 10000;
       if (v.toString().length > longestNumString.length) {
         longestNumString = v.toString();
       }
@@ -64,7 +63,9 @@ class Slider extends Base {
       },
       () => {
         return [
-          opts.label ? createLabel({}, () => opts.label) : null,
+          this.opts.label || this.opts.name
+            ? createLabel({}, () => this.opts.label || this.opts.name)
+            : null,
           createDiv(
             {
               className: "__floccUI-slider__inner",
@@ -76,13 +77,12 @@ class Slider extends Base {
                 min: this.opts.min.toString(),
                 max: this.opts.max.toString(),
                 step: this.opts.step.toString(),
-                value: this.opts.value.toString(),
               });
               this.input.addEventListener("input", () => {
                 const value = +this.input.value;
-                this.value = value;
-                this.updateMarker();
-                this.callbacks.forEach((callback) => callback(this.value));
+                // console.log(value);
+                // this.updateMarker();
+                this.opts.name && this.environment?.set(this.opts.name, value);
               });
               return this.input;
             }
@@ -92,9 +92,9 @@ class Slider extends Base {
       }
     );
 
-    if (opts.style) {
-      for (let key in opts.style) {
-        const value = opts.style[key];
+    if (this.opts.style) {
+      for (let key in this.opts.style) {
+        const value = this.opts.style[key];
         const pair = parsePair(key, value);
         // @ts-ignore
         this.element.style[pair.key] = pair.value;
@@ -104,7 +104,7 @@ class Slider extends Base {
     // add CSS
     createStyle(styles, "__floccUI-slider-css");
 
-    this.updateMarker();
+    this.listen();
   }
 
   updateMarker() {
@@ -112,20 +112,22 @@ class Slider extends Base {
     const decimals =
       (step | 0) === step ? 0 : step.toString().split(".")[1].length || 0;
 
-    let strValue = this.value.toString();
+    const value = this.environment?.get(this.opts.name);
+    if (value === null || value === undefined) return;
+
+    let strValue = value.toString();
+
     if (decimals > 0 && !strValue.includes(".")) strValue += ".";
     while (strValue.split(".")[1].length < decimals) strValue += "0";
     this.marker.innerHTML = strValue;
   }
 
-  once(callback: (value: number) => void): this {
-    callback(this.value);
-    return this;
-  }
-
-  onChange(callback: (value: number) => void): this {
-    this.callbacks.push(callback);
-    return this;
+  listen() {
+    if (this.environment && this.opts.name) {
+      this.input.value = this.environment.get(this.opts.name);
+      this.updateMarker();
+    }
+    window.requestAnimationFrame(() => this.listen());
   }
 }
 
