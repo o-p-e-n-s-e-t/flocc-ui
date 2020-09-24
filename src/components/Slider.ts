@@ -21,6 +21,7 @@ const defaultSliderOptions = {
 class Slider extends Base {
   callbacks: ((value: number) => void)[] = [];
   input: HTMLInputElement;
+  inner: HTMLDivElement;
   minLabel: HTMLLabelElement;
   maxLabel: HTMLLabelElement;
   marker: HTMLLabelElement;
@@ -35,6 +36,11 @@ class Slider extends Base {
 
     this.element = document.createElement("div");
     this.element.classList.add("__floccUI-slider__container");
+
+    this.inner = document.createElement("div");
+    this.inner.classList.add("__floccUI-slider__inner");
+    this.element.appendChild(this.inner);
+
     if (opts.style) {
       for (let key in opts.style) {
         const value = opts.style[key];
@@ -43,6 +49,11 @@ class Slider extends Base {
         this.element.style[pair.key] = pair.value;
       }
     }
+
+    this.marker = document.createElement("label");
+    this.marker.classList.add("__floccUI-slider__marker");
+    this.element.appendChild(this.marker);
+
     this.input = document.createElement("input");
     this.input.classList.add("__floccUI-slider");
     this.input.type = "range";
@@ -56,7 +67,7 @@ class Slider extends Base {
       this.updateMarker();
       this.callbacks.forEach((callback) => callback(this.value));
     });
-    this.element.appendChild(this.input);
+    this.inner.appendChild(this.input);
 
     this.minLabel = document.createElement("label");
     this.minLabel.innerHTML = this.opts.min.toString();
@@ -71,12 +82,8 @@ class Slider extends Base {
       "__floccUI-slider__max"
     );
 
-    this.element.appendChild(this.minLabel);
-    this.element.appendChild(this.maxLabel);
-
-    this.marker = document.createElement("label");
-    this.marker.classList.add("__floccUI-slider__marker");
-    this.element.appendChild(this.marker);
+    this.inner.appendChild(this.minLabel);
+    this.inner.appendChild(this.maxLabel);
 
     // add CSS
     if (!document.getElementById("__floccUI-slider-css")) {
@@ -85,6 +92,9 @@ class Slider extends Base {
       style.innerHTML = `
         .__floccUI-slider__container {
           user-select: none;
+        }
+        .__floccUI-slider__inner {
+          padding: 30px 0 24px;
         }
         .__floccUI-slider {
           appearance: none;
@@ -113,7 +123,7 @@ class Slider extends Base {
           background: rgba(0, 0, 0, 0.15);
           border-radius: 2px;
         }
-        .floccUI-slider::-ms-track {
+        .__floccUI-slider::-ms-track {
           width: 100%;
           cursor: pointer;
           background: transparent; 
@@ -125,7 +135,7 @@ class Slider extends Base {
           border: 1px solid #aaa;
           padding: 3px;
           position: absolute;
-          top: -26px;
+          top: 0;
           transform: translateX(-50%);
           font-size: 11px;
         }
@@ -143,15 +153,15 @@ class Slider extends Base {
           border-right: 1px solid #aaa;
         }
         .__floccUI-slider__min {
-          top: 4px;
-          left: -1px;
-          position: relative;
+          bottom: 0;
+          top: unset;
+          left: 8px;
         }
         .__floccUI-slider__max {
           float: right;
-          top: 4px;
+          top: unset;
+          bottom: 0;
           right: -16px;
-          position: relative;
         }
         .__floccUI-slider__min:before,
         .__floccUI-slider__max:before {

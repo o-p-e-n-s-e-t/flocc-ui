@@ -62,7 +62,7 @@ export class Input extends Base {
             border-radius: 3px;
             display: block;
             font-size: 12px;
-            padding: 4px 6px;
+            padding: 6px 6px;
             width: 100%;
           }
         `;
