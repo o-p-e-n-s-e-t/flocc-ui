@@ -1,5 +1,8 @@
 import Base from "./Base";
 import { parsePair } from "../utils/serialize";
+import createStyle from "../utils/createStyle";
+import styles from "./Input.css";
+import { createDiv, createInput } from "../utils/createElement";
 
 interface InputOptions {
   value?: string | number;
@@ -26,8 +29,24 @@ export class Input extends Base {
     this.value = this.opts.value;
     this.type = +this.value === this.value ? "number" : "string";
 
-    this.element = document.createElement("div");
-    this.element.classList.add("__floccUI-input__container");
+    this.element = createDiv(
+      { className: "__floccUI-input__container" },
+      () => {
+        this.input = createInput({
+          className: "__floccUI-input",
+          type: this.type === "number" ? "number" : "text",
+          value: this.value.toString(),
+        });
+        this.input.addEventListener("input", () => {
+          const value =
+            this.type === "number" ? +this.input.value : this.input.value;
+          this.value = value;
+          this.callbacks.forEach((callback) => callback(this.value));
+        });
+        return this.input;
+      }
+    );
+
     if (opts.style) {
       for (let key in opts.style) {
         const value = opts.style[key];
@@ -36,38 +55,9 @@ export class Input extends Base {
         this.element.style[pair.key] = pair.value;
       }
     }
-    this.input = document.createElement("input");
-    this.input.classList.add("__floccUI-input");
-    this.input.type = this.type === "number" ? "number" : "text";
-    this.input.value = this.value.toString();
-    this.input.addEventListener("input", () => {
-      const value =
-        this.type === "number" ? +this.input.value : this.input.value;
-      this.value = value;
-      this.callbacks.forEach((callback) => callback(this.value));
-    });
-    this.element.appendChild(this.input);
 
     // add CSS
-    if (!document.getElementById("__floccUI-input-css")) {
-      const style = document.createElement("style");
-      style.id = "__floccUI-input-css";
-      style.innerHTML = `
-          .__floccUI-input__container {
-          }
-          .__floccUI-input {
-            appearance: none;
-            -webkit-appearance: none;
-            border: 1px solid #aaa;
-            border-radius: 3px;
-            display: block;
-            font-size: 12px;
-            padding: 6px 6px;
-            width: 100%;
-          }
-        `;
-      document.head.appendChild(style);
-    }
+    createStyle(styles, "__floccUI-input-css");
   }
 
   once(callback: (value: number | string) => void): this {
