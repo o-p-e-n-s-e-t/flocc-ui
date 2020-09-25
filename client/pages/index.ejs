@@ -28,6 +28,7 @@
         const agent = new Agent({
           x: utils.random(0, width),
           y: utils.random(0, height),
+          size: 2,
         });
         agent.addRule(tick);
         environment.addAgent(agent);
@@ -41,10 +42,10 @@
         requestAnimationFrame(run);
       })();
 
-      new Panel(environment, () => [
+      new Panel(environment, [
         new Slider({
           name: "dx",
-          label: "oopsie",
+          label: "DX",
           min: -2,
           max: 2,
         }),
@@ -55,6 +56,7 @@
         }),
         new Slider({
           name: "dy",
+          label: "another dy",
           min: 0,
           max: 4,
         }),

@@ -32,5 +32,8 @@
   },
   "peerDependencies": {
     "flocc": "0.5.x"
+  },
+  "prettier": {
+    "arrowParens": "avoid"
   }
 }

@@ -21,7 +21,7 @@ export default function createElement<T extends HTMLElement>(
 
   for (let key in opts) {
     if (key === "className") {
-      opts.className.split(" ").forEach((c) => {
+      opts.className.split(" ").forEach(c => {
         el.classList.add(c);
       });
     } else {
@@ -37,7 +37,7 @@ export default function createElement<T extends HTMLElement>(
     } else if (children instanceof HTMLElement) {
       el.appendChild(children);
     } else {
-      children.forEach((child) => {
+      children.forEach(child => {
         if (child) {
           el.appendChild(child);
         }
@@ -49,14 +49,18 @@ export default function createElement<T extends HTMLElement>(
   return el;
 }
 
-export const createLabel = (opts: ElementOptions, contents?: Contents) => {
+export const createLabel = (opts?: ElementOptions, contents?: Contents) => {
   return createElement<HTMLLabelElement>("label", opts, contents);
 };
 
-export const createDiv = (opts: ElementOptions, contents?: Contents) => {
+export const createDiv = (opts?: ElementOptions, contents?: Contents) => {
   return createElement<HTMLDivElement>("div", opts, contents);
 };
 
-export const createInput = (opts: ElementOptions, contents?: Contents) => {
+export const createInput = (opts?: ElementOptions, contents?: Contents) => {
   return createElement<HTMLInputElement>("input", opts, contents);
+};
+
+export const createButton = (opts?: ElementOptions, contents?: Contents) => {
+  return createElement<HTMLButtonElement>("button", opts, contents);
 };
