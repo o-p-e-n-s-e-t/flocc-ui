@@ -1,8 +1,10 @@
 {
   "name": "flocc-ui",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "dist/flocc-ui.js",
+  "module": "dist/flocc-ui.es.js",
+  "typings": "dist/main.d.ts",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -cw",
