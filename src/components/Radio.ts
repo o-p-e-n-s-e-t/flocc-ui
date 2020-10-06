@@ -102,7 +102,6 @@ class Radio extends Base {
       const choices = Array.from(
         this.element.querySelectorAll(`[name="__floccUI-radio-${this.id}"]`)
       );
-      console.log(choices);
       choices.forEach((choice, i) => {
         if (!(choice instanceof HTMLInputElement)) return;
         const value = this.environment.get(this.opts.name);

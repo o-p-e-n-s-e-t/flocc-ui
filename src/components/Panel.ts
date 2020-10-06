@@ -41,10 +41,7 @@ class Panel extends Base {
     ]);
     document.body.appendChild(this.element);
 
-    const dragOn = () => {
-      console.log("dragging", this);
-      this.dragging = true;
-    };
+    const dragOn = () => (this.dragging = true);
     const dragOff = () => (this.dragging = false);
 
     dragBar.addEventListener("mousedown", dragOn);
