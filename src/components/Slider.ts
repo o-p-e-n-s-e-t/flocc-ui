@@ -80,8 +80,6 @@ class Slider extends Base {
               });
               this.input.addEventListener("input", () => {
                 const value = +this.input.value;
-                // console.log(value);
-                // this.updateMarker();
                 this.opts.name && this.environment?.set(this.opts.name, value);
               });
               return this.input;

@@ -9,6 +9,7 @@ interface InputOptions {
   style?: {
     [key: string]: string | number;
   };
+  onChange?: () => void;
 }
 
 const defaultInputOptions: InputOptions = {
@@ -41,7 +42,7 @@ export class Input extends Base {
           const value =
             this.type === "number" ? +this.input.value : this.input.value;
           this.value = value;
-          this.callbacks.forEach((callback) => callback(this.value));
+          this.callbacks.forEach(callback => callback(this.value));
         });
         return this.input;
       }
@@ -58,15 +59,5 @@ export class Input extends Base {
 
     // add CSS
     createStyle(styles, "__floccUI-input-css");
-  }
-
-  once(callback: (value: number | string) => void): this {
-    callback(this.value);
-    return this;
-  }
-
-  onChange(callback: (value: number | string) => void): this {
-    this.callbacks.push(callback);
-    return this;
   }
 }

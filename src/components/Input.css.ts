@@ -10,5 +10,6 @@ export default `
   display: block;
   font-size: 12px;
   padding: 6px 6px;
+  margin-bottom: 5px;
   width: 100%;
 }`;

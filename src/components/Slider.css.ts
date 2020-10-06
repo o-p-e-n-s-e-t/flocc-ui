@@ -3,9 +3,10 @@ export default `
     display: flex;
     align-items: center;
     font-size: 12px;
-    margin-bottom: 10px;
-    padding: 5px;
+    margin-bottom: 5px;
+    padding: 2px 0;
     user-select: none;
+    height: 18px;
 }
 
 .__floccUI-slider__container:last-child {
@@ -25,10 +26,6 @@ export default `
     width: 100%;
 }
 
-.__floccUI-slider:focus {
-    outline: 0;
-}
-
 .__floccUI-slider::-webkit-slider-thumb {
     appearance: none;
     -webkit-appearance: none;
@@ -42,6 +39,14 @@ export default `
 }
 
 .__floccUI-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+}
+
+.__floccUI-slider::-moz-range-track {
     width: 100%;
     height: 4px;
     cursor: pointer;

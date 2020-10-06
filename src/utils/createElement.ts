@@ -3,7 +3,7 @@ interface ElementOptions {
   [key: string]: any;
 }
 
-type Contents = () => string | HTMLElement | HTMLElement[];
+type Contents = () => string | HTMLElement | (string | HTMLElement)[];
 
 const defaultElementOptions: ElementOptions = Object.assign(
   {},
@@ -24,6 +24,9 @@ export default function createElement<T extends HTMLElement>(
       opts.className.split(" ").forEach(c => {
         el.classList.add(c);
       });
+    } else if (key === "checked") {
+      // @ts-ignore
+      if (opts[key]) el.setAttribute("checked", "");
     } else {
       // @ts-ignore
       el[key] = opts[key];
@@ -38,8 +41,10 @@ export default function createElement<T extends HTMLElement>(
       el.appendChild(children);
     } else {
       children.forEach(child => {
-        if (child) {
+        if (child instanceof HTMLElement) {
           el.appendChild(child);
+        } else {
+          el.innerHTML += child;
         }
       });
     }
@@ -63,4 +68,8 @@ export const createInput = (opts?: ElementOptions, contents?: Contents) => {
 
 export const createButton = (opts?: ElementOptions, contents?: Contents) => {
   return createElement<HTMLButtonElement>("button", opts, contents);
+};
+
+export const createSpan = (opts?: ElementOptions, contents?: Contents) => {
+  return createElement<HTMLSpanElement>("span", opts, contents);
 };

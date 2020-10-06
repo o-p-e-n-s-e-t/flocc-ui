@@ -12,7 +12,7 @@
     <div id="canvas"></div>
     <script>
       const { Agent, Environment, CanvasRenderer, utils } = window.flocc;
-      const { Panel, Slider, Input } = window.floccUI;
+      const { Panel, Slider, Input, Button, Radio } = window.floccUI;
 
       const [width, height] = [500, 500];
       const environment = new Environment({ width, height });
@@ -59,6 +59,22 @@
           label: "another dy",
           min: 0,
           max: 4,
+        }),
+        new Input({}),
+        new Radio({
+          choices: [-2, 0, 2],
+          choiceLabels: ["left", "stop", "right"],
+          value: 0,
+          name: "dx",
+        }),
+        new Button({
+          label: "Reset",
+          onClick() {
+            environment.set({
+              dx: 0,
+              dy: 0,
+            });
+          },
         }),
       ]);
     </script>

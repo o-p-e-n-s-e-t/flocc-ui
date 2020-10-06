@@ -41,10 +41,18 @@ class Panel extends Base {
     ]);
     document.body.appendChild(this.element);
 
-    dragBar.addEventListener("mousedown", e => (this.dragging = true));
-    document.body.addEventListener("mouseup", e => (this.dragging = false));
+    const dragOn = () => {
+      console.log("dragging", this);
+      this.dragging = true;
+    };
+    const dragOff = () => (this.dragging = false);
+
+    dragBar.addEventListener("mousedown", dragOn);
+    document.body.addEventListener("mouseup", dragOff);
+    document.body.addEventListener("mouseleave", dragOff);
 
     document.body.addEventListener("mousemove", e => {
+      // do nothing if we're not currently dragging
       if (!this.dragging) return;
       const { left, top } = this.element.getBoundingClientRect();
       this.element.style.left = left + e.movementX + "px";

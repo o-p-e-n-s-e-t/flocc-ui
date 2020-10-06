@@ -23,8 +23,9 @@ export default `
     padding: 0;
     font-weight: bold;
     text-align: center;
-    width: 20px;
+    flex: 0 0 20px;
     user-select: none;
+    line-height: 0;
 }
 
 .__floccUI-panel--collapsed {
@@ -34,5 +35,11 @@ export default `
 
 .__floccUI-panel__components {
     padding: 5px;
+}
+
+.__floccUI-panel__components > *:last-child,
+.__floccUI-panel__components > *:last-child > *:last-child,
+.__floccUI-panel__components > *:last-child > *:last-child > *:last-child {
+    margin-bottom: 0;
 }
 `;
