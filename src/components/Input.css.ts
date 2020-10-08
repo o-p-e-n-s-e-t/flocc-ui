@@ -12,4 +12,10 @@ export default `
   padding: 6px 6px;
   margin-bottom: 5px;
   width: 100%;
+}
+
+.__floccUI-input__prompt-button {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
 }`;

@@ -29,7 +29,7 @@ class Button extends Base {
 
     this.element.addEventListener("click", this.opts.onClick);
 
-    createStyle(styles, "__floccUI-button");
+    createStyle(styles, "__floccUI-button-css");
   }
 }
 

@@ -1,3 +1,6 @@
+import labelStyles from "../components/Label.css";
+import createStyle from "./createStyle";
+
 interface ElementOptions {
   className?: string;
   [key: string]: any;
@@ -39,11 +42,11 @@ export default function createElement<T extends HTMLElement>(
       el.innerHTML = children;
     } else if (children instanceof HTMLElement) {
       el.appendChild(children);
-    } else {
+    } else if (children) {
       children.forEach(child => {
         if (child instanceof HTMLElement) {
           el.appendChild(child);
-        } else {
+        } else if (child) {
           el.innerHTML += child;
         }
       });
@@ -55,7 +58,12 @@ export default function createElement<T extends HTMLElement>(
 }
 
 export const createLabel = (opts?: ElementOptions, contents?: Contents) => {
-  return createElement<HTMLLabelElement>("label", opts, contents);
+  createStyle(labelStyles, "__floccUI-label");
+  return createElement<HTMLLabelElement>(
+    "label",
+    Object.assign({ className: "__floccUI-label" }, opts),
+    contents
+  );
 };
 
 export const createDiv = (opts?: ElementOptions, contents?: Contents) => {

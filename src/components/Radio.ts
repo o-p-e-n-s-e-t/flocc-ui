@@ -51,14 +51,7 @@ class Radio extends Base {
         const els: (string | HTMLElement)[] = [];
         const label =
           this.opts.name || this.opts.label
-            ? [
-                createLabel(
-                  {
-                    className: "__floccUI-radio-container__label",
-                  },
-                  () => this.opts.name || this.opts.label
-                ),
-              ]
+            ? [createLabel({}, () => this.opts.name || this.opts.label)]
             : [];
         const choices = this.opts.choices.map((choice, i) => {
           const labelText = this.opts.choiceLabels[i];
@@ -92,7 +85,7 @@ class Radio extends Base {
       }
     );
 
-    createStyle(styles, "__floccUI-radio");
+    createStyle(styles, "__floccUI-radio-css");
 
     this.listen();
   }
