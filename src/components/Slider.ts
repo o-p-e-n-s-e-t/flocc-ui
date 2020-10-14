@@ -115,8 +115,10 @@ class Slider extends Base {
 
     let strValue = value.toString();
 
-    if (decimals > 0 && !strValue.includes(".")) strValue += ".";
-    while (strValue.split(".")[1].length < decimals) strValue += "0";
+    if (decimals > 0 && !strValue.includes(".")) {
+      strValue += ".";
+      while (strValue.split(".")[1].length < decimals) strValue += "0";
+    }
     this.marker.innerHTML = strValue;
   }
 
