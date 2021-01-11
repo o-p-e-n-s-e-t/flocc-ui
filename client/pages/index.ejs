@@ -85,7 +85,7 @@
           name: "dx",
         }),
         new Button({
-          label: "Reset",
+          label: () => environment.time.toString(),
           onClick() {
             environment.set({
               dx: 0,

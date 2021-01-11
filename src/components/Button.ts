@@ -4,13 +4,13 @@ import Base from "./Base";
 import styles from "./Button.css";
 
 interface ButtonOptions {
-  label?: string;
+  label?: string | (() => string);
   onClick?: () => void;
 }
 
 const defaultButtonOptions = {
   label: "Click Me",
-  onClick: () => {},
+  onClick: () => {}
 };
 
 class Button extends Base {
@@ -22,14 +22,28 @@ class Button extends Base {
 
     this.element = createButton(
       {
-        className: "__floccUI-button",
+        className: "__floccUI-button"
       },
-      () => this.opts.label
+      () => {
+        const { label } = this.opts;
+        return typeof label === "string" ? label : label();
+      }
     );
 
-    this.element.addEventListener("click", this.opts.onClick);
+    this.opts.onClick &&
+      this.element.addEventListener("click", () => {
+        this.opts.onClick();
+      });
 
     createStyle(styles, "__floccUI-button-css");
+
+    this.listen();
+  }
+
+  listen() {
+    const { label } = this.opts;
+    this.element.innerHTML = typeof label === "string" ? label : label();
+    window.requestAnimationFrame(() => this.listen());
   }
 }
 
