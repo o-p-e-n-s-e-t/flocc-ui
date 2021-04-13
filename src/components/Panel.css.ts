@@ -11,9 +11,12 @@ export default `
 
 .__floccUI-panel__toggle-container {
     background: #eee;
-    cursor: move;
     display: flex;
     padding: 5px;
+}
+
+.__floccUI-panel__toggle-container--floating {
+    cursor: move;
 }
 
 .__floccUI-panel__toggle {

@@ -10,7 +10,7 @@ interface ButtonOptions {
 
 const defaultButtonOptions = {
   label: "Click Me",
-  onClick: () => {}
+  onClick: () => {},
 };
 
 class Button extends Base {
@@ -22,7 +22,7 @@ class Button extends Base {
 
     this.element = createButton(
       {
-        className: "__floccUI-button"
+        className: "__floccUI-button",
       },
       () => {
         const { label } = this.opts;

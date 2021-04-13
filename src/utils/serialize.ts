@@ -30,14 +30,14 @@ export function parsePair(
     parsedValue = value.toString() + "px";
   }
 
-  const parsedKey = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+  const parsedKey = key.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`);
 
   return { key: parsedKey, value: parsedValue };
 }
 
 export default function serialize(obj: StyleObj = {}) {
   return Object.keys(obj)
-    .map((key) => {
+    .map(key => {
       const value = obj[key];
       let parsedValue = value;
 
@@ -45,10 +45,7 @@ export default function serialize(obj: StyleObj = {}) {
         parsedValue = value.toString() + "px";
       }
 
-      const parsedKey = key.replace(
-        /([A-Z])/g,
-        (g) => `-${g[0].toLowerCase()}`
-      );
+      const parsedKey = key.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`);
 
       return `${parsedKey}:${parsedValue};`;
     })
